@@ -1,0 +1,84 @@
+Codebook for run_analysis.R
+Version 1
+============================================================================
+Introduction
+
+Rawdata obtained from https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip 
+
+Training data were collected from the following files:
+X_train.txt
+y_train.txt
+subject_train.txt
+
+The test data were collected from the following files:
+X_test.txt
+y_test.txt
+subject_test.txt
+
+The label data were collected from the following files:
+features.txt
+activity_labels.txt
+========================================================================
+Script -> run_analysis.R
+
+Raw data map to original variables:
+
+Training data extracted -> target variable:
+X_train.txt -> RawTrain 
+y_train.txt -> RawTrainLabel
+subject_train.txt -> RawTrainSubjects
+
+The test data extracted -> target variable:
+X_test.txt -> RawTest
+y_test.txt -> RawTestLabel
+subject_test.txt -> RawTestSubjects
+
+The label data extracted -> target variable:
+features.txt -> RawLabels
+activity_labels.txt -> act_labels
+
+No changes are done at this stage. The variables are an exact match to the raw data.
+
+Package dplyr is used mostly to read the data in and convert it into tables.
+=====================================================================================
+Data Transformation
+
+Variables:
+-'temp'
+	The first transformation done is to add the label descriptions from 'RawLabels' obtained from file 
+	"features.txt" to a new dataset called 'temp'. Dataset 'temp' is converted to a data frame to make 
+	it easier to work with and view.
+-'TrainLabels' and 'TestLabels'
+	The next transformation is to merge the activity labels and the RawTrainLabel and RawTestLabel from file 		
+
+	"activity_labels.txt" to new variables 'TrainLabels' and 'TestLabels'. The activity code and description 
+	are added.
+-'Train' and 'Test'
+	Function tbl_df is used to convert the 'RawTrain' and 'RawTest' dataset into a tables. These tables are
+	stored in varaibles call 'Train' and 'Test' respectively.
+	A further transformation is done by doing a bind_cols call to join the label variables created in the 
+	previous step to the newly created tables. So at this stage the 561 feature descriptions from the raw data
+	is joined with the test and train results respectively.
+	The next step is to add the subjects to the test and train result sets. The columns that are added are 
+	renamed at this stage to avoid duplicate column names. The new column name is 'Subject'.
+-'myData'
+	At this point the 'Test' adn 'Train' datasets are merged to form one dataset
+-'myData2'
+	Select only the activity description (V2), Subject and any column containing "std()" or "mean()" are added to
+	a new dataset 'myData2.
+	Rename column V2 to activity description. Replaced the following with more meaningful text in the column headings:
+	t -> "time"
+	f -> "frequency"
+	Acc ->"Accelerometer"
+	Gyro -> "Gyroscope"
+	Mag -> "Magnitude"
+	BodyBody -> "Body"
+
+The tidying of data is using package tidyr.
+-mySummary
+	This is a dataset where the data is grouped by activity description, the Subject and is based on the final dateset
+	'myData2.
+-myTidy
+	A summary is created based on 'myData2' to summarise each variable as a mean per each group created. This data is 	
+
+	then the final dataset called 'myTidy' and written out as text file.
