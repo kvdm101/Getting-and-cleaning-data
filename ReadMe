@@ -1,0 +1,106 @@
+========================================================================================
+Getting and Cleaning data - Course Project
+Version 1.0
+Karin vd Merwe
+=======================================================================================
+Introduction:
+
+The course project objective was to extract data and produce a tidy dataset 
+based on a Samsung experiment carried out on on a group of 30 volenteers.
+The dataset used to produce the final product is the "Human Activity Recognition 
+Using Smartphones Dataset".
+
+For further details on the study please refer to:
+http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones 
+=======================================================================================
+About the Raw Data
+
+The raw data that was used for the project can be found on:
+https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+README.txt - explains all files in the data set.
+
+Training data were collected from the following files:
+X_train.txt
+y_train.txt
+subject_train.txt
+
+The test data were collected from the following files:
+X_test.txt
+y_test.txt
+subject_test.txt
+
+The label data were collected from the following files:
+features.txt
+activity_labels.txt
+
+=======================================================================================
+About the script
+
+The Tidy dataset can be read into R with read.table(header=TRUE).
+
+Using mainly functions from R code packages 'dplyr' and 'tidyr' to extract and clean the data
+Each of the steps are commented to assist in understanding what each step in the scripts are doing
+The script used to perform all the tasks is called "run_analysis.R"
+
+In summary the script does the following:
+
+1) extract all the raw data into local variables
+
+Training data extracted -> target variable:
+X_train.txt -> RawTrain 
+y_train.txt -> RawTrainLabel
+subject_train.txt -> RawTrainSubjects
+
+The test data extracted -> target variable:
+X_test.txt -> RawTest
+y_test.txt -> RawTestLabel
+subject_test.txt -> RawTestSubjects
+
+The label data extracted -> target variable:
+features.txt -> RawLabels
+activity_labels.txt -> act_labels
+
+2) Convert the raw data to tables as extracted and then overlay column names with labels
+This is done for the training and test data sets individually.
+The subjects per each of these sets are also added and renamed to ensure smooth merging
+of the datasets.
+
+Training dataset name -> 'Train'
+Testing dataset name -> 'Test'
+
+Each dataset contains the 561 original variables as per the raw data and added the activity no,
+activity description and the subjects. Only subjects variable were renamed at this stage to be exact for merging purposes
+in the next step.
+
+3) Merges the training and the test sets to create one data set
+
+Merge 'Test' and 'Train' into one dataset named 'myData'.
+
+4) Extracts only the measurements on the mean and standard deviation for each measurement
+Select only the activity description(V2), the Subject and  all columns containing "std()" or "mean()" into a new dataset 'myData2'.
+
+5) Appropriately labels the data set with descriptive variable names
+Rename column V2 to activity description. Replaced the following with more meaningful text in the column headings:
+t -> "time"
+f -> "frequency"
+Acc ->"Accelerometer"
+Gyro -> "Gyroscope"
+Mag -> "Magnitude"
+BodyBody -> "Body"
+
+6) Summarise data by activty and subject
+Create groups in a new dataset called 'mySummary' where it is grouped by activity description and subject
+
+7) Write the summary file as a tidy data set
+A text file is then generated from the script with the tidy dataset called "tidydata.txt" and written to the working repository.
+
+
+License:
+========
+Use of the original dataset in publications must be acknowledged by referencing the following publication [1] 
+
+[1] Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. Human Activity Recognition on Smartphones using a Multiclass Hardware-Friendly Support Vector Machine. International Workshop of Ambient Assisted Living (IWAAL 2012). Vitoria-Gasteiz, Spain. Dec 2012
+
+This dataset is distributed AS-IS and no responsibility implied or explicit can be addressed to the authors or their institutions for its use or misuse. Any commercial use is prohibited.
+
+Jorge L. Reyes-Ortiz, Alessandro Ghio, Luca Oneto, Davide Anguita. November 2012.
